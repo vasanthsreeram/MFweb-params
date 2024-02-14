@@ -1,6 +1,13 @@
 clear all; close all; clc
 
+% Print the current working directory
+disp(['Current working directory: ', pwd]);
+
 Nb = 100;
+tpb = 3;
+months = 3;
+% Check and create the /data directory if it doesn't exist
+
 
 %% Task
 
@@ -14,12 +21,12 @@ for taskNo=1:Nb
         
     Task = [];
     
-    trial_per_block = 100;
+    trial_per_block = tpb;
     n_task_items = size(task_user.task.item,2);
     
     trialNo = 0;
             
-    for blockNo = 1:4
+    for blockNo = 1:months
 
         for trialinBlockNo = 1:trial_per_block
 
@@ -35,9 +42,11 @@ for taskNo=1:Nb
             display_order(display_order==unused_tree)=[];
             
             tree_positions = zeros(1,4);
-            for i=1:4
-                if i~=unused_tree
-                    tree_positions(i) = find(display_order==i);
+            position_counter = 1; % Start position counter for used trees
+            for i = 1:length(display_order)
+                if display_order(i) ~= unused_tree
+                    tree_positions(display_order(i)) = position_counter;
+                    position_counter = position_counter + 1;
                 end
             end
             
@@ -52,13 +61,15 @@ for taskNo=1:Nb
     end
            
     % Save  
-    if ~exist(folder_name,'dir')
-        mkdir(folder_name)
-        save(strcat(folder_name,'Task.mat'),'Task')
-        save(strcat(folder_name,'taskNo.mat'),'taskNo')
-    else
-        disp('This taskNo already exists')
-    end
+if ~exist(folder_name, 'dir')
+    mkdir(folder_name)
+    disp(['Created directory: ', folder_name]);
+end
+    mkdir(folder_name,'dir')
+    disp('This taskNo already exists')
+    save(strcat(folder_name,'Task.mat'),'Task')
+    save(strcat(folder_name,'taskNo.mat'),'taskNo')
+    disp(['Saved files in: ', folder_name]);
     
 end
 
@@ -97,12 +108,14 @@ for trainingNo=1:Nb
     end
     
     % Save  
-    if ~exist(folder_name,'dir')
-        mkdir(folder_name)
-        save(strcat(folder_name,'Training.mat'),'Training')
-        save(strcat(folder_name,'trainingNo.mat'),'trainingNo')
-    else
-        disp('This trainingNo already exists')
-    end  
+if ~exist(folder_name, 'dir')
+    mkdir(folder_name)
+    disp(['Created directory: ', folder_name]);
+end
+
+% Save the files whether the directory was just created or already existed
+save(fullfile(folder_name, 'Training.mat'), 'Training');
+save(fullfile(folder_name, 'trainingNo.mat'), 'trainingNo');
+disp(['Saved files in: ', folder_name]);
 end
 

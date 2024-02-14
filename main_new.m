@@ -82,7 +82,7 @@ for userID=1:10
         
     
     %% Save
-    folder_name = strcat('/Users/magdadubois/MF/task_data/data/user_',int2str(userID), '/');
+    folder_name = strcat('../data/user_',int2str(userID), '/');
     
     if ~exist(folder_name,'dir')
         mkdir(folder_name)
